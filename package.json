@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/YagyaBhatta83/EasyLaundry-API/issues"
   },
-  "homepage": "https://github.com/YagyaBhatta83/EasyLaundry-API#readme"
+  "homepage": "https://github.com/YagyaBhatta83/EasyLaundry-API#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
