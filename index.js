@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config()
+const userRouter = require('./routes/users');
 
 const app = express();
 app.use(express.json());
@@ -11,6 +12,7 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
         console.log("Successfully connected to MongodB server");
     }, (err) => console.log(err));
 
+    app.use('/users',userRouter);
   
 
 
