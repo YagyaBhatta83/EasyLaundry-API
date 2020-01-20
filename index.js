@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config()
 const userRouter = require('./routes/users');
 const serviceRouter = require('./routes/service');
+const auth = require('./auth');
+
 
 const app = express();
 app.use(express.json());
+app.use(auth.verifyUser);
 app.use(express.urlencoded({extended: true}));
 
 

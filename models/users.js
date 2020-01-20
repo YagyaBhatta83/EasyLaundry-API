@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema(
     location: {
       type: String,
       required: true
+    },
+    admin:{
+        type:Boolean,
+        default:false
     }
-    // admin:{
-    //     type:Boolean,
-    //     default:false
-    // }
   },
   { timestamps: true }
 );

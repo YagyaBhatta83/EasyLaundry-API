@@ -25,12 +25,14 @@ router.post("/services", (req, res, next) => {
     .get((req, res, next) => {
         Service.findById(req.params.id)
             .populate({
-                path: 'tasks',
+                path: 'service',
                 select: 'name'
             })
             .then((service) => {
                 res.json(service);
             }).catch(next);
-        })
+        });
+
+       
     module.exports = router;
 
