@@ -12,5 +12,25 @@ router.post("/services", (req, res, next) => {
         })
         .catch(next);
     });
+
+    router.get("/services", (req, res, next) => {
+        Service.find({})
+            .then((service) => {
+                res.json(service);
+            })
+            .catch(next);
+    })
+
+    router.route('/:id')
+    .get((req, res, next) => {
+        Service.findById(req.params.id)
+            .populate({
+                path: 'tasks',
+                select: 'name'
+            })
+            .then((service) => {
+                res.json(service);
+            }).catch(next);
+        })
     module.exports = router;
 
