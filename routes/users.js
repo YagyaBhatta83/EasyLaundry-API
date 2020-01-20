@@ -59,7 +59,9 @@ router.post('/login', (req, res, next) => {
         }).catch(next);
     })
 
-  
+    router.get('/me',auth.verifyUser, (req, res, next) => {
+      res.json({ _id: req.user._id, fullName: req.user.fullName, username: req.user.username, phoneNumber: req.user.phoneNumber, location: req.user.location });
+    });
 
 
 module.exports = router;
