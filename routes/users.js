@@ -63,5 +63,12 @@ router.post('/login', (req, res, next) => {
       res.json({ _id: req.user._id, fullName: req.user.fullName, username: req.user.username, phoneNumber: req.user.phoneNumber, location: req.user.location });
     });
 
+    router.put('/me', (req, res, next) => {
+      User.findByIdAndUpdate(req.user._id, { $set: req.body }, { new: true })
+          .then((user) => {
+              res.json({ _id: user._id, fullName: req.user.fullName, username: req.user.username, phoneNumber: req.user.phoneNumber, location: req.user.location });
+          }).catch(next);
+  });
+
 
 module.exports = router;
