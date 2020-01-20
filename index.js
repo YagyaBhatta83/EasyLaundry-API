@@ -2,9 +2,11 @@ const express = require('express')
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config()
 const userRouter = require('./routes/users');
+const serviceRouter = require('./routes/service');
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 
 mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
@@ -13,6 +15,7 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
     }, (err) => console.log(err));
 
     app.use('/users',userRouter);
+    app.use(serviceRouter);
   
 
 
