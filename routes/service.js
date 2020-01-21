@@ -35,11 +35,20 @@ router.post("/services", (req, res, next) => {
             }).catch(next);
         });
 
-        router.route('/:id')
+        router.route('/services/:id')
         .put((req, res, next) => {
             Service.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
                 .then((service) => {
-                    res.json(service);
+                    res.send("Service Updated Successfully! ");
+                }).catch(next);
+        });
+
+        router.route('/services/:id')
+        .delete((req, res, next) => {
+            Service.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+                .then((service) => {
+                    if (service == null) throw new Error("Service not found!");
+                    res.send("Service Deleted Successfully! ");
                 }).catch(next);
         });
     module.exports = router;
