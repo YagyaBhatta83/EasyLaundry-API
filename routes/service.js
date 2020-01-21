@@ -1,6 +1,8 @@
 const express = require("express");
 const Service = require("../models/service");
 const router = express.Router();
+const auth = require('../auth');
+
 
 router.post("/services", (req, res, next) => {
 
@@ -33,6 +35,12 @@ router.post("/services", (req, res, next) => {
             }).catch(next);
         });
 
-       
+        router.route('/:id')
+        .put((req, res, next) => {
+            Service.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+                .then((service) => {
+                    res.json(service);
+                }).catch(next);
+        });
     module.exports = router;
 
