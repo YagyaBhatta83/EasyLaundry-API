@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config()
 const userRouter = require('./routes/users');
 const serviceRouter = require('./routes/service');
+const itemRouter = require('./routes/item');
 const auth = require('./auth');
 
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
 
     app.use('/users',userRouter);
     app.use(serviceRouter);
+    app.use(itemRouter);
   
 
 
