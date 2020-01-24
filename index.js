@@ -5,6 +5,7 @@ const userRouter = require('./routes/users');
 const serviceRouter = require('./routes/service');
 const itemRouter = require('./routes/item');
 const scheduleRouter = require('./routes/schedule');
+const reviewRouter = require('./routes/review');
 const auth = require('./auth');
 
 
@@ -23,6 +24,7 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
     app.use(itemRouter);
     app.use('/users',userRouter);
     app.use(serviceRouter);
+    app.use(reviewRouter);
     
   
 
