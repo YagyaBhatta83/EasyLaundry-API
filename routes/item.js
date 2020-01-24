@@ -36,5 +36,13 @@ router.route('/:id')
         }).catch(next);
     });
 
+    router.route('/items/:id')
+    .put((req, res, next) => {
+        Item.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+            .then((item) => {
+                res.send("Item Updated Successfully! ");
+            }).catch(next);
+    });
+
     module.exports = router;
 
