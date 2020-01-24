@@ -19,7 +19,7 @@ router.post("/items", (req, res, err) => {
 router.get("/items", (req, res, next) => {
   Item.find({})
       .then((item) => {
-          res.json(item);
+        res.send("Item not found! ");
       })
       .catch(next);
 })
@@ -32,7 +32,7 @@ router.route('/:id')
             select: 'name'
         })
         .then((item) => {
-            res.json(item);
+            res.send("Item not found! ");
         }).catch(next);
     });
 
@@ -41,6 +41,15 @@ router.route('/:id')
         Item.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
             .then((item) => {
                 res.send("Item Updated Successfully! ");
+            }).catch(next);
+    });
+
+    router.route('/items/:id')
+    .delete((req, res, next) => {
+        Item.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+            .then((item) => {
+                if (item == null) throw new Error("item not found!");
+                res.send("item Deleted Successfully! ");
             }).catch(next);
     });
 
