@@ -14,4 +14,12 @@ router.post("/reviews", (req, res, err) => {
           });
       });
 
+      router.get("/reviews", (req, res, next) => {
+        Review.find({})
+            .then((review) => {
+              res.json(review);
+            })
+            .catch(next);
+      });
+
       module.exports = router;
