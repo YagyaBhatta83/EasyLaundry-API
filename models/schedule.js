@@ -15,16 +15,17 @@ location:{
   },
   status:{
     type:String,
-    required:true
+    default:'processing'
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
 item: {
   type: mongoose.Schema.Types.ObjectId,
   ref: 'Item'
-},
-user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
+}
+
 },{ timestamps: true });
 
 module.exports=mongoose.model("Schedule",scheduleSchema)
