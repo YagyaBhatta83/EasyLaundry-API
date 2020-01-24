@@ -15,13 +15,26 @@ router.post("/items", (req, res, err) => {
         });
     });
 
-router.get('/items',(req,res)=>{
-  Item.find({},(error,data)=>{
-    res.json(data);
-  })
 
-
+router.get("/items", (req, res, next) => {
+  Item.find({})
+      .then((item) => {
+          res.json(item);
+      })
+      .catch(next);
 })
+
+router.route('/:id')
+.get((req, res, next) => {
+    Item.findById(req.params.id)
+        .populate({
+            path: 'item',
+            select: 'name'
+        })
+        .then((item) => {
+            res.json(item);
+        }).catch(next);
+    });
 
     module.exports = router;
 
