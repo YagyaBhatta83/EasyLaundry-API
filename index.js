@@ -21,9 +21,6 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
     app.use(itemRouter);
     app.use('/users',userRouter);
     app.use(serviceRouter);
-    
-   
-  
   
 
 
