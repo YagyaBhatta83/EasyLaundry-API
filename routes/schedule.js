@@ -34,6 +34,12 @@ router.post("/schedules", (req, res, err) => {
         }).catch(next);
     });
 
-    
+    router.route('/schedules/:id')
+    .put((req, res, next) => {
+        Schedule.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+            .then((schedule) => {
+                res.send("Item Updated Successfully! ");
+            }).catch(next);
+    });
       
 module.exports = router;
