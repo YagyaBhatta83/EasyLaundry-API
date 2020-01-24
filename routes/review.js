@@ -22,4 +22,16 @@ router.post("/reviews", (req, res, err) => {
             .catch(next);
       });
 
+      router.route('/reviews/:id')
+      .get((req, res, next) => {
+          Review.findById(req.params.id)
+              .populate({
+                  path: 'review',
+                  select: 'message'
+              })
+              .then((review) => {
+                  res.send(review);
+              }).catch(next);
+          });
+
       module.exports = router;
