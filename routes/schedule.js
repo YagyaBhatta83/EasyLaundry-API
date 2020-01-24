@@ -38,7 +38,16 @@ router.post("/schedules", (req, res, err) => {
     .put((req, res, next) => {
         Schedule.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
             .then((schedule) => {
-                res.send("Item Updated Successfully! ");
+                res.send("order Updated Successfully! ");
+            }).catch(next);
+    });
+
+    router.route('/schedules/:id')
+    .delete((req, res, next) => {
+        Schedule.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+            .then((schedule) => {
+                if (schedule == null) throw new Error("order not found!");
+                res.send("order Deleted Successfully! ");
             }).catch(next);
     });
       
