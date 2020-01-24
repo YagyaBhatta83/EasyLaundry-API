@@ -20,6 +20,20 @@ router.post("/schedules", (req, res, err) => {
               res.json(schedule);
             })
             .catch(next);
-      })
+      });
+
+      router.route('/schedules/:id')
+.get((req, res, next) => {
+    Schedule.findById(req.params.id)
+        .populate({
+            path: 'schedule',
+            select: 'date'
+        })
+        .then((schedule) => {
+            res.send(schedule);
+        }).catch(next);
+    });
+
+    
       
 module.exports = router;
