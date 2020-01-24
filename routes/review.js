@@ -17,7 +17,7 @@ router.post("/reviews", (req, res, err) => {
       router.get("/reviews", (req, res, next) => {
         Review.find({})
             .then((review) => {
-              res.json(review);
+              res.send(review);
             })
             .catch(next);
       });
@@ -30,7 +30,7 @@ router.post("/reviews", (req, res, err) => {
                   select: 'message'
               })
               .then((review) => {
-                  res.send(review);
+                  res.send("review not found!");
               }).catch(next);
           });
 
@@ -39,6 +39,15 @@ router.post("/reviews", (req, res, err) => {
               Review.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
                   .then((review) => {
                       res.send("review Updated Successfully! ");
+                  }).catch(next);
+          });
+
+          router.route('/reviews/:id')
+          .delete((req, res, next) => {
+              Review.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+                  .then((review) => {
+                      if (review == null) throw new Error("review not found!");
+                      res.send("review Deleted Successfully! ");
                   }).catch(next);
           });
 
