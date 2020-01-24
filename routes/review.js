@@ -34,4 +34,12 @@ router.post("/reviews", (req, res, err) => {
               }).catch(next);
           });
 
+          router.route('/reviews/:id')
+          .put((req, res, next) => {
+              Review.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+                  .then((review) => {
+                      res.send("review Updated Successfully! ");
+                  }).catch(next);
+          });
+
       module.exports = router;
