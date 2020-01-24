@@ -13,5 +13,13 @@ router.post("/schedules", (req, res, err) => {
               res.status(500).send(err)
           });
       });
+
+      router.get("/schedules", (req, res, next) => {
+        Schedule.find({})
+            .then((schedule) => {
+              res.json(schedule);
+            })
+            .catch(next);
+      })
       
 module.exports = router;

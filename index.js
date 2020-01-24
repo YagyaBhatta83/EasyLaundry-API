@@ -19,10 +19,11 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
         console.log("Successfully connected to MongodB server");
     }, (err) => console.log(err));
 
+    app.use(scheduleRouter);
     app.use(itemRouter);
     app.use('/users',userRouter);
     app.use(serviceRouter);
-    app.use(scheduleRouter);
+    
   
 
 
