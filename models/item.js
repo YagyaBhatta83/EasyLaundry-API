@@ -8,7 +8,12 @@ required:true
 price:{
   type:Number,
   required:true
-},service: {
+},
+image: {
+  type:String,
+  default:''
+},
+service: {
   type: mongoose.Schema.Types.ObjectId,
   ref: 'Service'
 }
