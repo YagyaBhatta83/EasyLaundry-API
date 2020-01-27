@@ -5,9 +5,6 @@ const User = require("../models/users");
 const router = express.Router();
 const auth = require('../auth');
 
-
-
-
 router.post("/signup", (req, res, next) => {
   let password = req.body.password;
   bcrypt.hash(password, 10, function(err, hash) {

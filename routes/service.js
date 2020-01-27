@@ -2,12 +2,35 @@ const express = require("express");
 const Service = require("../models/service");
 const router = express.Router();
 const auth = require('../auth');
+const multer = require('multer');
+const path = require("path");
 
 
-router.post("/services", (req, res, next) => {
+const storage = multer.diskStorage({
+    destination: "./public/uploads",
+    filename: (req, file, callback) => {
+        let ext = path.extname(file.originalname);
+        callback(null, `${file.fieldname}-${Date.now()}${ext}`);
+    }
+});
+
+const imageFileFilter = (req, file, cb) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new Error("You can upload only image files!"), false);
+    }
+    cb(null, true);
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter: imageFileFilter
+})
+
+router.post("/services",upload.single('image'), (req, res, next) => {
 
       Service.create({
-        name: req.body.name
+        name: req.body.name,
+        image:req.file.path
       })
         .then(service => {
           res.send( service );
