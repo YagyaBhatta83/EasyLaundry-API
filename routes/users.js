@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const router = express.Router();
 const auth = require('../auth');
+const multer = require('multer');
+const path = require("path");
 
 router.post("/signup", (req, res, next) => {
   let password = req.body.password;
@@ -19,7 +21,7 @@ router.post("/signup", (req, res, next) => {
       password: hash,
       phoneNumber: req.body.phoneNumber,
       location: req.body.location
-    })
+        })
       .then(user => {
         let token = jwt.sign({ _id: user._id }, process.env.SECRET);
         res.json({ status: "Signup success!", token: token });
@@ -66,6 +68,36 @@ router.post('/login', (req, res, next) => {
               res.json({ _id: user._id, fullName: req.user.fullName, username: req.user.username, password: req.user.password, phoneNumber: req.user.phoneNumber, location: req.user.location });
           }).catch(next);
   });
+
+
+  //upload image 
+  const storage = multer.diskStorage({
+    destination: "./public/uploads",
+    filename: (req, file, callback) => {
+        let ext = path.extname(file.originalname);
+        callback(null, `${file.fieldname}-${Date.now()}${ext}`);
+    }
+});
+
+const imageFileFilter = (req, file, cb) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new Error("You can upload only image files!"), false);
+    }
+    cb(null, true);
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter: imageFileFilter
+})
+
+router.post('/upload', auth.verifyUser, upload.single('image'), (req, res, next) => {
+      req.user.image = req.file.path
+      req.user.save()
+      .then((user) => {
+        res.send("image uploaded successfully");
+    }).catch(next);
+    });
 
 
 module.exports = router;
