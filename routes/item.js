@@ -5,6 +5,7 @@ const auth = require('../auth');
 const multer = require('multer');
 const path = require("path");
 
+
 const storage = multer.diskStorage({
     destination: "./public/uploads",
     filename: (req, file, callback) => {
@@ -82,4 +83,3 @@ router.route('/:id')
     });
 
     module.exports = router;
-
