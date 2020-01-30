@@ -46,7 +46,7 @@ router.post("/services",upload.single('image'), (req, res, next) => {
             .catch(next);
     })
 
-    router.route('/:id')
+    router.route('/services/:id')
     .get((req, res, next) => {
         Service.findById(req.params.id)
             .populate({

@@ -7,7 +7,7 @@ const auth = require('../auth');
 const multer = require('multer');
 const path = require("path");
 
-router.post("/signup", (req, res, next) => {
+router.post("/users/signup", (req, res, next) => {
   let password = req.body.password;
   bcrypt.hash(password, 10, function(err, hash) {
     if (err) {
@@ -31,7 +31,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 
-router.post('/login', (req, res, next) => {
+router.post('/users/login', (req, res, next) => {
     User.findOne({ username: req.body.username })
         .then((user) => {
         	// console.log(user.username);
@@ -58,11 +58,11 @@ router.post('/login', (req, res, next) => {
         }).catch(next);
     })
 
-    router.get('/me',auth.verifyUser, (req, res, next) => {
+    router.get('/users/me',auth.verifyUser, (req, res, next) => {
       res.json({ _id: req.user._id, fullName: req.user.fullName, username: req.user.username, password: req.user.password, phoneNumber: req.user.phoneNumber, location: req.user.location });
     });
 
-    router.put('/me', (req, res, next) => {
+    router.put('/users/me', (req, res, next) => {
       User.findByIdAndUpdate(req.user._id, { $set: req.body }, { new: true })
           .then((user) => {
               res.json({ _id: user._id, fullName: req.user.fullName, username: req.user.username, password: req.user.password, phoneNumber: req.user.phoneNumber, location: req.user.location });
@@ -91,7 +91,7 @@ const upload = multer({
     fileFilter: imageFileFilter
 })
 
-router.post('/upload', auth.verifyUser, upload.single('image'), (req, res, next) => {
+router.post('/users/upload', auth.verifyUser, upload.single('image'), (req, res, next) => {
       req.user.image = req.file.path
       req.user.save()
       .then((user) => {

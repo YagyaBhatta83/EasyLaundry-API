@@ -53,7 +53,7 @@ router.get("/items", (req, res, next) => {
       .catch(next);
 })
 
-router.route('/:id')
+router.route('/items/:id')
 .get((req, res, next) => {
     Item.findById(req.params.id)
         .populate({

@@ -11,7 +11,6 @@ const auth = require('./auth');
 
 const app = express();
 app.use(express.json());
-app.use(auth.verifyUser);
 app.use(express.urlencoded({extended: true}));
 
 
@@ -20,11 +19,12 @@ mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: t
         console.log("Successfully connected to MongodB server");
     }, (err) => console.log(err));
 
-    app.use(reviewRouter);
-    app.use('/users',userRouter);
+    
+    app.use(userRouter);
     app.use(serviceRouter);
     app.use(itemRouter);
     app.use(scheduleRouter);
+    app.use(reviewRouter);
    
     
   
