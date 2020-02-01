@@ -1,9 +1,8 @@
-const express = require("express");
-const Item = require("../models/item");
+const {express,path,multer}=require('./../config');
 const router = express.Router();
+const Item = require("../models/item");
 const auth = require('../auth');
-const multer = require('multer');
-const path = require("path");
+
 
 
 const storage = multer.diskStorage({
@@ -26,32 +25,30 @@ const upload = multer({
     fileFilter: imageFileFilter
 })
 
-router.post("/items",upload.single('image'), (req, res, err) => {
+router.post("/items",auth.verifyUser, auth.verifyAdmin,upload.single('image'), (req, res, next) => {
 
-  Item.create(
-      {
+  Item.create({
           name:req.body.name,
           price:req.body.price,
-          image:req.file.path
-      }
-  )
+          image:req.body.image || req.file.path
+      })
   .then((item) => {
       res.statusCode = 201;
       res.json(item);
   })
-        .catch(err => {
-            res.status(500).send(err)
-        });
+  .catch(err => {
+       next(err);
     });
+});
 
 
 router.get("/items", (req, res, next) => {
   Item.find({})
       .then((item) => {
-        res.send("Item not found! ");
+        res.json(item);
       })
-      .catch(next);
-})
+      .catch(err=>next(err));
+});
 
 router.route('/items/:id')
 .get((req, res, next) => {
@@ -61,25 +58,21 @@ router.route('/items/:id')
             select: 'name'
         })
         .then((item) => {
-            res.send("Item not found! ");
-        }).catch(next);
-    });
-
-    router.route('/items/:id')
-    .put((req, res, next) => {
+            res.json(item);
+        }).catch(err=>next(err));
+    })
+.put(auth.verifyUser, auth.verifyAdmin,(req, res, next) => {
         Item.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
             .then((item) => {
-                res.send("Item Updated Successfully! ");
-            }).catch(next);
-    });
-
-    router.route('/items/:id')
-    .delete((req, res, next) => {
-        Item.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+                res.json({msg: "item Updated Successfully! "});
+            }).catch(err=>next(err));
+    })
+.delete(auth.verifyUser, auth.verifyAdmin,(req, res, next) => {
+        Item.findOneAndDelete({ _id: req.params.id})
             .then((item) => {
                 if (item == null) throw new Error("item not found!");
-                res.send("item Deleted Successfully! ");
-            }).catch(next);
+                res.json({msg: "item Deleted Successfully! "});
+            }).catch(err=>next(err));
     });
 
     module.exports = router;

@@ -1,31 +1,30 @@
-const mongoose=require('mongoose');
+const {mongoose}=require('./../config');
 
 const scheduleSchema = new mongoose.Schema({
-date:{
-type:String,
-required:true
-},
-time:{
-  type:String,
-  required:true
-},
-location:{
+  date:{
+    type:String,
+    required:true
+    },
+  time:{
     type:String,
     required:true
   },
+  location:{
+      type:String,
+      required:true
+    },
   status:{
-    type:String,
-    default:'processing'
-  },
+      type:String,
+      default:'processing'
+    },
   user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+  item: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-item: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'Item'
-}
-
+    ref: 'Item'
+  }
 },{ timestamps: true });
 
 module.exports=mongoose.model("Schedule",scheduleSchema)

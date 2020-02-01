@@ -1,23 +1,19 @@
-const mongoose=require('mongoose');
+const {mongoose}=require('./../config');
 
 const itemSchema=new mongoose.Schema({
-name:{
-type:String,
-required:true
-},
-price:{
-  type:Number,
-  required:true
-},
-image: {
-  type:String,
-  default:''
-},
-service: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'Service'
-}
-},{ timestamps: true });
+  name:{
+    type:String,
+    required:true
+    },
+  price:{
+    type:Number,
+    required:true
+    },
+  image: {
+    type:String,
+    default:''
+    }
+  },{ timestamps: true });
 
 module.exports=mongoose.model("Item",itemSchema)
 

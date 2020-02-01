@@ -1,9 +1,7 @@
-const express = require("express");
-const Service = require("../models/service");
+const {express,multer,path} = require("./../config");
 const router = express.Router();
+const Service = require("../models/service");
 const auth = require('../auth');
-const multer = require('multer');
-const path = require("path");
 
 
 const storage = multer.diskStorage({
@@ -26,16 +24,16 @@ const upload = multer({
     fileFilter: imageFileFilter
 })
 
-router.post("/services",upload.single('image'), (req, res, next) => {
+router.post("/services",auth.verifyUser, auth.verifyAdmin,upload.single('image'), (req, res, next) => {
 
       Service.create({
         name: req.body.name,
         image:req.file.path
       })
         .then(service => {
-          res.send( service );
+          res.json( service );
         })
-        .catch(next);
+        .catch(err=>next(err));
     });
 
     router.get("/services", (req, res, next) => {
@@ -43,10 +41,10 @@ router.post("/services",upload.single('image'), (req, res, next) => {
             .then((service) => {
                 res.json(service);
             })
-            .catch(next);
-    })
+            .catch(err=>next(err));
+    });
 
-    router.route('/services/:id')
+router.route('/services/:id')
     .get((req, res, next) => {
         Service.findById(req.params.id)
             .populate({
@@ -55,24 +53,20 @@ router.post("/services",upload.single('image'), (req, res, next) => {
             })
             .then((service) => {
                 res.json(service);
-            }).catch(next);
-        });
-
-        router.route('/services/:id')
-        .put((req, res, next) => {
+            }).catch(err=>next(err));
+        })
+    .put(auth.verifyUser, auth.verifyAdmin,(req, res, next) => {
             Service.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
                 .then((service) => {
-                    res.send("Service Updated Successfully! ");
-                }).catch(next);
-        });
-
-        router.route('/services/:id')
-        .delete((req, res, next) => {
-            Service.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+                    res.json({message:"Service Updated Successfully! "});
+                }).catch(err=>next(err));
+        })        
+    .delete(auth.verifyUser, auth.verifyAdmin,(req, res, next) => {
+            Service.findOneAndDelete({_id: req.params.id })
                 .then((service) => {
                     if (service == null) throw new Error("Service not found!");
-                    res.send("Service Deleted Successfully! ");
-                }).catch(next);
+                    res.json({message:"Service Deleted Successfully! "});
+                }).catch(err=>next(err));
         });
     module.exports = router;
 

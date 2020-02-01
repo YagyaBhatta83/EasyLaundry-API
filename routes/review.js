@@ -1,28 +1,28 @@
-const express = require("express");
-const Review = require("../models/review");
+const {express} = require("./../config");
 const router = express.Router();
+const Review = require("../models/review");
 const auth = require('../auth');
 
-router.post("/reviews", (req, res, err) => {
+router.post("/reviews",auth.verifyUser, (req, res, next) => {
     Review.create(req.body)
     .then((review) => {
         res.statusCode = 201;
         res.json(review);
     })
-          .catch(err => {
-              res.status(500).send(err)
+    .catch(err => {
+              res.status(500).json(err)
           });
       });
 
-      router.get("/reviews", (req, res, next) => {
+    router.get("/reviews", (req, res, next) => {
         Review.find({})
             .then((review) => {
-              res.send(review);
+              res.json(review);
             })
-            .catch(next);
+            .catch(err=>next(err));
       });
 
-      router.route('/reviews/:id')
+    router.route('/reviews/:id')
       .get((req, res, next) => {
           Review.findById(req.params.id)
               .populate({
@@ -30,25 +30,15 @@ router.post("/reviews", (req, res, err) => {
                   select: 'message'
               })
               .then((review) => {
-                  res.send("review not found!");
-              }).catch(next);
-          });
-
-          router.route('/reviews/:id')
-          .put((req, res, next) => {
-              Review.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-                  .then((review) => {
-                      res.send("review Updated Successfully! ");
-                  }).catch(next);
-          });
-
-          router.route('/reviews/:id')
-          .delete((req, res, next) => {
-              Review.findOneAndDelete({ author: req.params._id, _id: req.params.id })
+                  res.json(review);
+              }).catch(err=>next(err));
+          })
+          .delete(auth.verifyUser, auth.verifyAdmin,(req, res, next) => {
+              Review.findOneAndDelete({_id: req.params.id })
                   .then((review) => {
                       if (review == null) throw new Error("review not found!");
-                      res.send("review Deleted Successfully! ");
-                  }).catch(next);
+                      res.json({message:"review Deleted Successfully!"});
+                  }).catch(err=>next(err));
           });
 
       module.exports = router;

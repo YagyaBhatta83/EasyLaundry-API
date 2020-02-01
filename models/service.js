@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const {mongoose}=require('./../config');
 const serviceSchema = new mongoose.Schema(
     {
       name: {
@@ -9,7 +9,5 @@ const serviceSchema = new mongoose.Schema(
         type:String,
         default:''
       },
-    },
-      { timestamps: true }
-      );
-      module.exports = mongoose.model("Service", serviceSchema);
+    },{ timestamps: true });
+module.exports = mongoose.model("Service", serviceSchema);
