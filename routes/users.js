@@ -92,7 +92,7 @@ router.post('/users/upload', auth.verifyUser, upload.single('image'), (req, res,
       req.user.image = req.file.path;
       req.user.save()
       .then((user) => {
-        res.json({message:"image uploaded successfully"});
+        res.json({status:"200", message: "Image Uploaded"});
       }).catch(err=>
       next(err)); 
     });

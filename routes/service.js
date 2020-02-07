@@ -3,7 +3,9 @@ const router = express.Router();
 const Service = require("../models/service");
 const auth = require('../auth');
 
-
+// router.get('/',(req,res,next)=>{
+//     res.status(200).json({'message':'hello from laundry'});
+// });
 const storage = multer.diskStorage({
     destination: "./public/uploads",
     filename: (req, file, callback) => {

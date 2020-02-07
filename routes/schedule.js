@@ -4,7 +4,15 @@ const Schedule = require("../models/schedule");
 const auth = require('../auth');
 
 router.post("/schedules",auth.verifyUser, (req, res, next) => {
-    Schedule.create(req.body)
+    Schedule.create({
+        date:req.body.date,
+          time:req.body.time,
+          location:req.body.location,
+          noofitem:req.body.noofitem,
+          service: req.body.service,
+          item: req.body.item,
+          user: req.user._id
+    })
     .then((schedule) => {
         res.statusCode = 201;
         res.json(schedule);
