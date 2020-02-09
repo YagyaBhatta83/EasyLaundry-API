@@ -55,6 +55,33 @@ router.post('/users/login', (req, res, next) => {
         }).catch(err=>next(err));
     })
 
+    router.get("/users", (req, res, next) => {
+      User.find({})
+          .then((user) => {
+            res.json(user);
+          })
+          .catch(err=>next(err));
+    });
+
+    router.route('/users/:id')
+    .get((req, res, next) => {
+        User.findById(req.params.id)
+            .populate({
+                path: 'user',
+                select: 'name'
+            })
+            .then((user) => {
+                res.json(user);
+            }).catch(err=>next(err));
+        })
+    .delete(auth.verifyUser, auth.verifyAdmin,(req, res, next) => {
+      User.findOneAndDelete(req.params.id)
+        .then((user) => {
+          if (user == null) throw new Error("User not found!");
+            res.json({msg: "User Deleted Successfully! "});
+            }).catch(err=>next(err));
+      });
+
     router.get('/users/me',auth.verifyUser, (req, res, next) => {
       res.json({fullName: req.user.fullName, username: req.user.username, phoneNumber: req.user.phoneNumber, location: req.user.location, image: req.user.image});
     });
