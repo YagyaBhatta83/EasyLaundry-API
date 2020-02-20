@@ -7,8 +7,11 @@ const auth = require('../auth');
 //     res.status(200).json({'message':'hello from laundry'});
 // });
 const storage = multer.diskStorage({
+
     destination: "./public/uploads",
     filename: (req, file, callback) => {
+        console.log('herehere>>',req.body);
+
         let ext = path.extname(file.originalname);
         callback(null, `${file.fieldname}-${Date.now()}${ext}`);
     }
@@ -26,7 +29,9 @@ const upload = multer({
     fileFilter: imageFileFilter
 })
 
-router.post("/services",auth.verifyUser, auth.verifyAdmin,upload.single('image'), (req, res, next) => {
+router.post("/services",auth.verifyUser, auth.verifyAdmin,upload.single("image"), (req, res, next) => {
+
+    console.log('req>>',req.body)
 
       Service.create({
         name: req.body.name,
